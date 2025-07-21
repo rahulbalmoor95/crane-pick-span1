@@ -1,33 +1,51 @@
-const beams = [
-  { id: 1, weight: 76, capacity: 78 },
-  { id: 2, weight: 84, capacity: 88 },
-  { id: 3, weight: 83, capacity: 88 },
-  { id: 4, weight: 86, capacity: 88 },
-  { id: 5, weight: 85, capacity: 88 },
-  { id: 6, weight: 87, capacity: 88 },
-  { id: 7, weight: 86, capacity: 88 },
-  { id: 8, weight: 84, capacity: 88 },
-  { id: 9, weight: 83, capacity: 88 },
-  { id: 10, weight: 82, capacity: 88 },
-  { id: 11, weight: 77, capacity: 78 }
-];
+const data75 = {
+  "10": 260.0, "15": 164.0, "20": 119.0, "25": 87.0,
+  "30": 66.0, "35": 52.0, "40": 41.4, "45": 33.8,
+  "50": 27.2, "55": 21.8, "60": null, "65": null,
+  "70": null, "75": null, "80": null, "85": null,
+  "90": null, "95": null, "100": null
+};
 
-function renderTable() {
-  const tbody = document.getElementById("beamTable");
-  tbody.innerHTML = ""; // clear existing rows
+const boomSelector = document.getElementById("boomLength");
+const chartBody = document.getElementById("chartBody");
 
-  beams.forEach(beam => {
-    const status = beam.weight <= beam.capacity ? "PASS" : "OVERLOAD";
-    const tr = document.createElement("tr");
-    tr.className = beam.weight <= beam.capacity ? "pass" : "fail";
-    tr.innerHTML = `
-      <td>${beam.id}</td>
-      <td>${beam.weight}</td>
-      <td>${beam.capacity}</td>
-      <td>${status}</td>
+function renderChart(data) {
+  chartBody.innerHTML = "";
+  for (let radius in data) {
+    const capacity = data[radius];
+    const row = document.createElement("tr");
+
+    const beamInput = document.createElement("input");
+    beamInput.type = "number";
+    beamInput.placeholder = "kips";
+    beamInput.addEventListener("input", () => updateStatus(capacity, beamInput, statusCell));
+
+    const statusCell = document.createElement("td");
+    statusCell.textContent = "-";
+
+    row.innerHTML = `
+      <td>${radius}</td>
+      <td>${capacity !== null ? capacity : 'N/A'}</td>
+      <td></td>
     `;
-    tbody.appendChild(tr);
-  });
+
+    row.cells[2].appendChild(beamInput);
+    row.appendChild(statusCell);
+    chartBody.appendChild(row);
+  }
 }
 
-document.addEventListener("DOMContentLoaded", renderTable);
+function updateStatus(capacity, input, statusCell) {
+  if (!capacity || input.value === "") {
+    statusCell.textContent = "-";
+    statusCell.className = "";
+    return;
+  }
+  const beamWeight = parseFloat(input.value);
+  const status = beamWeight <= capacity ? "PASS" : "OVERLOAD";
+  statusCell.textContent = status;
+  statusCell.className = status === "PASS" ? "pass" : "fail";
+}
+
+// Initial render
+renderChart(data75);
