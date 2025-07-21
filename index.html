@@ -1,23 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Crane Pick Visualizer – Span 1</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Crane Load Capacity Chart - GMK5210</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Crane Pick Plan – Span 1</h1>
+  <h1>GMK5210 - Crane Load Capacity Chart</h1>
 
-  <table>
+  <label for="boomLength">Boom Length:</label>
+  <select id="boomLength">
+    <option value="75">75 ft</option>
+  </select>
+
+  <table id="loadChart">
     <thead>
       <tr>
-        <th>Beam ID</th>
-        <th>Beam Weight (kips)</th>
-        <th>Crane Capacity (kips)</th>
+        <th>Radius (ft)</th>
+        <th>Capacity (kips)</th>
+        <th>Beam Weight (editable)</th>
         <th>Status</th>
       </tr>
     </thead>
-    <tbody id="beamTable"></tbody>
+    <tbody id="chartBody"></tbody>
   </table>
 
   <script src="script.js"></script>
